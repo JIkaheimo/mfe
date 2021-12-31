@@ -2,6 +2,10 @@
 
 import React from "react";
 
+import { BrowserRouter } from "react-router-dom";
+
+import Header from "./components/Header";
+
 // @ts-ignore
 import { mount } from "marketing/App";
 
@@ -14,11 +18,12 @@ const App = () => {
   });
 
   return (
-    <div>
-      <h1>Hello World</h1>
-      <hr />
-      <div ref={marketing} id='marketing'></div>
-    </div>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Header />
+        <div ref={marketing} id='marketing'></div>
+      </BrowserRouter>
+    </React.StrictMode>
   );
 };
 
