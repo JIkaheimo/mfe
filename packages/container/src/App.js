@@ -5,6 +5,8 @@ import React from "react";
 // @ts-ignore
 import { mount } from "marketing/App";
 
+console.log("test");
+
 const App = () => {
   const marketing = React.useRef(null);
 
