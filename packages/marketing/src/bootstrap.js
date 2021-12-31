@@ -2,7 +2,6 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-
 import App from "./App";
 
 const DEV_SELECTOR = "#marketing-dev--root";
@@ -11,9 +10,19 @@ const DEV_SELECTOR = "#marketing-dev--root";
  * Mounts the React application to the given element.
  *
  * @param {Element} element
+ * @param {any} options
  */
-const mount = (element) => {
-  ReactDOM.render(<App />, element);
+const mount = (element, { onNavigate } = {}) => {
+  ReactDOM.render(<App onNavigate={onNavigate} />, element);
+
+  return {
+    navigate: (location) => {
+      if (location) {
+        const event = new CustomEvent("navigate", { detail: location });
+        window.dispatchEvent(event);
+      }
+    },
+  };
 };
 
 /**
