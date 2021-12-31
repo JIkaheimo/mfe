@@ -5,8 +5,6 @@ import React from "react";
 // @ts-ignore
 import { mount } from "marketing/App";
 
-console.log("test");
-
 const App = () => {
   const marketing = React.useRef(null);
 
@@ -15,7 +13,13 @@ const App = () => {
     mount(marketing.current);
   });
 
-  return <div ref={marketing} id='marketing'></div>;
+  return (
+    <div>
+      <h1>Hello World</h1>
+      <hr />
+      <div ref={marketing} id='marketing'></div>
+    </div>
+  );
 };
 
 export default App;
