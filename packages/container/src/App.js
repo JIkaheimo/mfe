@@ -13,6 +13,7 @@ import Progress from "./components/Progress";
 
 const Marketing = lazy(() => import("./frontends/Marketing"));
 const Auth = lazy(() => import("./frontends/Auth"));
+const Dashboard = lazy(() => import("./frontends/Dashboard"));
 
 const generateClassName = createGenerateClassName({
   productionPrefix: "co",
@@ -37,6 +38,7 @@ const App = () => {
                     />
                   }
                 />
+                <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/*' element={<Marketing />} />
               </Routes>
             </Suspense>
