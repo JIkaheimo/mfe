@@ -1,16 +1,17 @@
 // @ts-check
 
-import React from "react";
+import React, { Suspense, lazy } from "react";
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   createGenerateClassName,
   StylesProvider,
 } from "@material-ui/core/styles";
 
 import Header from "./components/Header";
-import Marketing from "./frontends/Marketing";
-import Auth from "./frontends/Auth";
+
+const Marketing = lazy(() => import("./frontends/Marketing"));
+const Auth = lazy(() => import("./frontends/Auth"));
 
 const generateClassName = createGenerateClassName({
   productionPrefix: "co",
@@ -20,9 +21,15 @@ const App = () => (
   <React.StrictMode>
     <StylesProvider generateClassName={generateClassName}>
       <BrowserRouter>
-        <Header />
-        <Marketing />
-        <Auth />
+        <div>
+          <Header />
+          <Suspense fallback={<p>Loading ...</p>}>
+            <Routes>
+              <Route path='/auth/*' element={<Auth />} />
+              <Route path='/*' element={<Marketing />} />
+            </Routes>
+          </Suspense>
+        </div>
       </BrowserRouter>
     </StylesProvider>
   </React.StrictMode>
