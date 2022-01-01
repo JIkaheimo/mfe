@@ -9,6 +9,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import PubSub from "pubsub-js";
+
 import { StylesProvider, createGenerateClassName } from "@material-ui/core";
 
 import Landing from "./components/Landing";
@@ -21,25 +23,24 @@ const generateClassName = createGenerateClassName({
 const Routing = ({ onNavigate }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [initial, setInitial] = React.useState(true);
 
   // Handle navigation from the container.
   React.useEffect(() => {
-    const handleNavigate = (event) => {
-      const { pathname } = event.detail;
-      if (pathname != location.pathname) {
-        navigate(pathname);
-      }
-    };
+    const navigation = PubSub.subscribe(onNavigate, (_, { pathname }) => {
+      if (pathname == location.pathname) return;
+      navigate(pathname);
+    });
 
-    window.addEventListener("navigate", handleNavigate);
-    return () => window.removeEventListener("navigate", handleNavigate);
-  }, [location]);
+    return () => PubSub.unsubscribe(navigation);
+  }, [location, onNavigate]);
 
   // Forward navigation to the container.
   React.useEffect(() => {
-    if (onNavigate) {
-      onNavigate(location);
+    if (!initial) {
+      PubSub.publish("marketing.navigate", location);
     }
+    setInitial(false);
   }, [location]);
 
   return (
@@ -55,11 +56,11 @@ const Routing = ({ onNavigate }) => {
  *
  * @returns {JSX.Element}
  */
-const App = ({ onNavigate }) => {
+const App = ({ onNavigate, initialPath }) => {
   return (
     <React.StrictMode>
       <StylesProvider generateClassName={generateClassName}>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={[initialPath]}>
           <Routing onNavigate={onNavigate} />
         </MemoryRouter>
       </StylesProvider>

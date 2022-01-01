@@ -12,16 +12,14 @@ const DEV_SELECTOR = "#marketing-dev--root";
  * @param {Element} element
  * @param {any} options
  */
-const mount = (element, { onNavigate } = {}) => {
-  ReactDOM.render(<App onNavigate={onNavigate} />, element);
+const mount = (element, { onNavigate, initialPath } = {}) => {
+  ReactDOM.render(
+    <App onNavigate={onNavigate} initialPath={initialPath} />,
+    element
+  );
 
   return {
-    navigate: (location) => {
-      if (location) {
-        const event = new CustomEvent("navigate", { detail: location });
-        window.dispatchEvent(event);
-      }
-    },
+    onNavigate: "marketing.navigate",
   };
 };
 
