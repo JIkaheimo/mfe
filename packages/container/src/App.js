@@ -10,6 +10,7 @@ import {
 
 import Header from "./components/Header";
 import Marketing from "./frontends/Marketing";
+import Auth from "./frontends/Auth";
 
 const generateClassName = createGenerateClassName({
   productionPrefix: "co",
@@ -21,6 +22,7 @@ const App = () => (
       <BrowserRouter>
         <Header />
         <Marketing />
+        <Auth />
       </BrowserRouter>
     </StylesProvider>
   </React.StrictMode>
