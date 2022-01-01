@@ -8,8 +8,9 @@ import PubSub from "pubsub-js";
 import { mount } from "auth/App";
 import { NAVIGATE } from "./events";
 
-const Auth = () => {
+const Auth = ({ onSuccessfulAuthentication }) => {
   const [onNavigate, setOnNavigate] = React.useState(null);
+  const [onAuthenticate, setOnAuthenticate] = React.useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,11 +18,12 @@ const Auth = () => {
   const auth = React.useRef();
 
   React.useLayoutEffect(() => {
-    const { onNavigate } = mount(auth.current, {
+    const { onNavigate, onAuthenticate } = mount(auth.current, {
       onNavigate: NAVIGATE,
       initialPath: location.pathname,
     });
 
+    setOnAuthenticate(onAuthenticate);
     setOnNavigate(onNavigate);
   }, []);
 
@@ -33,6 +35,14 @@ const Auth = () => {
 
     return () => PubSub.unsubscribe(navigation);
   }, [location, onNavigate]);
+
+  React.useEffect(() => {
+    const authentication = PubSub.subscribe(onAuthenticate, (_, payload) => {
+      onSuccessfulAuthentication();
+    });
+
+    return () => PubSub.unsubscribe(authentication);
+  }, [onAuthenticate]);
 
   React.useEffect(() => {
     if (onNavigate) {

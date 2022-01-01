@@ -19,6 +19,7 @@ const mount = (element, { onNavigate, initialPath } = {}) => {
   );
 
   return {
+    onAuthenticate: "auth.authenticate",
     onNavigate: "auth.navigate",
   };
 };

@@ -43,10 +43,14 @@ const Routing = ({ onNavigate }) => {
     setInitial(false);
   }, [location]);
 
+  const authenticate = () => {
+    PubSub.publish("auth.authenticate", {});
+  };
+
   return (
     <Routes>
-      <Route path='/auth/signup' element={<SignUp onSignin={null} />} />
-      <Route path='/auth/signin' element={<SignIn onSignin={null} />} />
+      <Route path='/auth/signup' element={<SignUp onSignIn={authenticate} />} />
+      <Route path='/auth/signin' element={<SignIn onSignIn={authenticate} />} />
     </Routes>
   );
 };

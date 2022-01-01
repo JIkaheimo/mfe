@@ -18,22 +18,33 @@ const generateClassName = createGenerateClassName({
   productionPrefix: "co",
 });
 
-const App = () => (
-  <React.StrictMode>
-    <StylesProvider generateClassName={generateClassName}>
-      <BrowserRouter>
-        <div>
-          <Header />
-          <Suspense fallback={<Progress />}>
-            <Routes>
-              <Route path='/auth/*' element={<Auth />} />
-              <Route path='/*' element={<Marketing />} />
-            </Routes>
-          </Suspense>
-        </div>
-      </BrowserRouter>
-    </StylesProvider>
-  </React.StrictMode>
-);
+const App = () => {
+  const [signedIn, setSignedIn] = React.useState(false);
+
+  return (
+    <React.StrictMode>
+      <StylesProvider generateClassName={generateClassName}>
+        <BrowserRouter>
+          <div>
+            <Header signedIn={signedIn} onSignOut={() => setSignedIn(false)} />
+            <Suspense fallback={<Progress />}>
+              <Routes>
+                <Route
+                  path='/auth/*'
+                  element={
+                    <Auth
+                      onSuccessfulAuthentication={() => setSignedIn(true)}
+                    />
+                  }
+                />
+                <Route path='/*' element={<Marketing />} />
+              </Routes>
+            </Suspense>
+          </div>
+        </BrowserRouter>
+      </StylesProvider>
+    </React.StrictMode>
+  );
+};
 
 export default App;
